@@ -68,7 +68,7 @@ if radio == 'No':
 else:
     radio = [0, 1]
 
-clinical_data = pd.read_csv('seer_prostate_data_N3.0.csv')
+clinical_data = pd.read_csv('D:/Python/前列腺癌/01-Data/seer_prostate_data_N3.0.csv')
 clinical_data = clinical_data.drop(['Unnamed: 0'], axis=1)
 survival_time = clinical_data['Time']
 survival_status = clinical_data['Event']
@@ -145,7 +145,7 @@ if query:
         st.table(y_df)
         plt.ylabel("Survival probability")
         plt.xlabel("Time in months")
-        plt.title('Months to survival probability')
+        plt.title('Survival Probability')
         plt.legend()
         plt.grid(True)
         st.balloons()
@@ -167,7 +167,7 @@ if query:
         st.table(y_df)
         plt.ylabel("Survival probability")
         plt.xlabel("Time in months")
-        plt.title('Months to Survival Probability')
+        plt.title('Survival Probability')
         plt.legend()
         plt.grid(True)
         st.balloons()

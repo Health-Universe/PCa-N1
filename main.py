@@ -68,7 +68,7 @@ if radio == 'No':
 else:
     radio = [0, 1]
 
-clinical_data = pd.read_csv('D:/Python/前列腺癌/01-Data/seer_prostate_data_N3.0.csv')
+clinical_data = pd.read_csv('seer_prostate_data_N3.0.csv')
 clinical_data = clinical_data.drop(['Unnamed: 0'], axis=1)
 survival_time = clinical_data['Time']
 survival_status = clinical_data['Event']

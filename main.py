@@ -153,7 +153,7 @@ if query:
     else:
         prob = GDBT.predict(x_test)
         st.subheader('GDBT model score: ' + str(round(prob[0], 2)))
-        st.subheader('Survival Probability between 12 and 60 days:')
+        st.subheader('Survival Probability between 12 and 60 months:')
         surv = GDBT.predict_survival_function(x_test)
         yv = []
         for fn in surv:
@@ -163,7 +163,7 @@ if query:
                     # st.metric('X:' + str(fn.x[i]), fn(fn.x)[i])
             plt.step(fn.x[12:61], fn(fn.x)[12:61], where="post")
         y_df = pd.DataFrame(yv).T
-        y_df.columns = ['12days', '24days', '36days', '48days', '60days']
+        y_df.columns = ['12months', '24months', '36months', '48months', '60months']
         st.table(y_df)
         plt.ylabel("Survival probability")
         plt.xlabel("Time in months")

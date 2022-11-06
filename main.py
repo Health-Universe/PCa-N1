@@ -7,14 +7,14 @@ from sksurv.ensemble import RandomSurvivalForest
 from sksurv.ensemble import GradientBoostingSurvivalAnalysis
 import matplotlib.pyplot as plt
 
-st.set_page_config(page_title='ML', layout='wide')
+st.set_page_config(page_title='ML', layout='centered')
 
 st.title('Predict Survival Probability with Machine Learning ')
 st.sidebar.subheader('Variable Select')
 age = st.sidebar.selectbox('Age', ['≤60', '61-69', '≥70'])
 if age == '61-69':
     age = [1, 0, 0]
-elif age == '<=60':
+elif age == '≤60':
     age = [0, 1, 0]
 else:
     age = [0, 0, 1]
@@ -68,7 +68,7 @@ if radio == 'No':
 else:
     radio = [0, 1]
 
-clinical_data = pd.read_csv('seer_prostate_data_N3.0.csv')
+clinical_data = pd.read_csv('D:/Python/前列腺癌/01-Data/seer_prostate_data_N3.0.csv')
 clinical_data = clinical_data.drop(['Unnamed: 0'], axis=1)
 survival_time = clinical_data['Time']
 survival_status = clinical_data['Event']
@@ -129,31 +129,47 @@ if query:
     x_test = pd.concat([x_df, x_psa_df], axis=1)
     fig = plt.figure()
     if model == 'RSF':
+        prob = RSFsurvival.predict(x_test)
+        st.subheader('RSF model score: '+ str(round(prob[0],2)))
+        st.subheader('Survival probability between 12 and 60 months:')
         surv = RSFsurvival.predict_survival_function(x_test, return_array=True)
-        for i, s in enumerate(surv):
-            plt.step(RSFsurvival.event_times_[12:61], s[12:61], where="post", label=str(i))
+        yv = []
+        for j, s in enumerate(surv):
+            for j in range(0, len(s)):
+                if RSFsurvival.event_times_[j] in (12, 24, 36, 48, 60):
+                    yv.append(s[j])
+                    #st.metric('X:'+str(RSFsurvival.event_times_[j]), s[j])
+            plt.step(RSFsurvival.event_times_[12:61], s[12:61], where="post")
+        y_df = pd.DataFrame(yv).T
+        y_df.columns = ['12months', '24months', '36months', '48months', '60months']
+        st.table(y_df)
+        plt.ylabel("Survival probability")
+        plt.xlabel("Time in months")
+        plt.title('Months to survival probability')
+        plt.legend()
+        plt.grid(True)
+        st.balloons()
+        st.pyplot(fig)
     else:
+        prob = GDBT.predict(x_test)
+        st.subheader('GDBT model score: ' + str(round(prob[0], 2)))
+        st.subheader('Survival Probability between 12 and 60 days:')
         surv = GDBT.predict_survival_function(x_test)
-        for fn in surv:
-            plt.step(fn.x[12:61], fn(fn.x)[12:61], where="post")
-    plt.ylabel("Survival probability")
-    plt.xlabel("Time in months")
-    plt.legend()
-    plt.grid(True)
-    st.balloons()
-    st.pyplot(fig)
-    if model == 'RSF':
-        for i, s in enumerate(surv):
-            for i in range(0, len(s)):
-                if RSFsurvival.event_times_[i] in (12, 24, 36, 48, 60):
-                    st.metric('X:'+str(RSFsurvival.event_times_[i]), s[i])
-    else:
+        yv = []
         for fn in surv:
             for i in range(0, len(fn.x)):
                 if fn.x[i] in (12, 24, 36, 48, 60):
-                    st.metric('X:' + str(fn.x[i]), fn(fn.x)[i])
-    if model == 'RSF':
-        result=RSFsurvival.predict(x_test)  
-    else:
-        result=GDBT.predict(x_test)              
-    st.metric('Risk score:',result)
+                    yv.append(fn(fn.x)[i])
+                    # st.metric('X:' + str(fn.x[i]), fn(fn.x)[i])
+            plt.step(fn.x[12:61], fn(fn.x)[12:61], where="post")
+        y_df = pd.DataFrame(yv).T
+        y_df.columns = ['12days', '24days', '36days', '48days', '60days']
+        st.table(y_df)
+        plt.ylabel("Survival probability")
+        plt.xlabel("Time in months")
+        plt.title('Months to Survival Probability')
+        plt.legend()
+        plt.grid(True)
+        st.balloons()
+        st.pyplot(fig)
+

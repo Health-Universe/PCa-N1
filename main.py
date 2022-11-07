@@ -68,7 +68,7 @@ if radio == 'No':
 else:
     radio = [0, 1]
 
-clinical_data = pd.read_csv('seer_prostate_data_N3.0.csv')
+clinical_data = pd.read_csv('D:/Python/前列腺癌/01-Data/seer_prostate_data_N3.0.csv')
 clinical_data = clinical_data.drop(['Unnamed: 0'], axis=1)
 survival_time = clinical_data['Time']
 survival_status = clinical_data['Event']
@@ -129,8 +129,6 @@ if query:
     x_test = pd.concat([x_df, x_psa_df], axis=1)
     fig = plt.figure()
     if model == 'Random Survival Forest':
-        prob = RSFsurvival.predict(x_test)
-        st.subheader('RSF model score: '+ str(round(prob[0],2)))
         st.subheader('Survival probability between 12 and 60 months:')
         surv = RSFsurvival.predict_survival_function(x_test, return_array=True)
         yv = []
@@ -152,8 +150,6 @@ if query:
         st.balloons()
         st.pyplot(fig)
     else:
-        prob = GDBT.predict(x_test)
-        st.subheader('GDBT model score: ' + str(round(prob[0], 2)))
         st.subheader('Survival Probability between 12 and 60 months:')
         surv = GDBT.predict_survival_function(x_test)
         yv = []

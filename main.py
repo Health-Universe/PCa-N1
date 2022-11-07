@@ -113,7 +113,7 @@ GDBT = GradientBoostingSurvivalAnalysis(learning_rate=0.4,
                                         random_state=0)
 GDBT.fit(x_train, new_y_train)
 
-model = st.selectbox('Model Select', ['RSF', 'GDBT'])
+model = st.selectbox('Model Select', ['Gradient Boosting Survival Analysis', 'Random Survival Forest'])
 query = st.button('Predict')
 if query:
     age.extend(race)
@@ -128,7 +128,7 @@ if query:
     x_psa_df = pd.DataFrame([psa],columns=['PSA'])
     x_test = pd.concat([x_df, x_psa_df], axis=1)
     fig = plt.figure()
-    if model == 'RSF':
+    if model == 'Random Survival Forest':
         prob = RSFsurvival.predict(x_test)
         st.subheader('RSF model score: '+ str(round(prob[0],2)))
         st.subheader('Survival probability between 12 and 60 months:')
@@ -136,13 +136,14 @@ if query:
         yv = []
         for j, s in enumerate(surv):
             for j in range(0, len(s)):
-                if RSFsurvival.event_times_[j] in (12, 24, 36, 48, 60):
+                if RSFsurvival.event_times_[j] in (36, 60, 96, 115):
                     yv.append(s[j])
                     #st.metric('X:'+str(RSFsurvival.event_times_[j]), s[j])
-            plt.step(RSFsurvival.event_times_[12:61], s[12:61], where="post")
+            plt.step(RSFsurvival.event_times_[0:120], s[0:120], where="post")
         y_df = pd.DataFrame(yv).T
-        y_df.columns = ['12months', '24months', '36months', '48months', '60months']
+        y_df.columns = ['36months', '60months', '96months', '115months']
         st.table(y_df)
+        plt.xlim(0,120)
         plt.ylabel("Survival probability")
         plt.xlabel("Time in months")
         plt.title('Survival Probability')
@@ -158,13 +159,14 @@ if query:
         yv = []
         for fn in surv:
             for i in range(0, len(fn.x)):
-                if fn.x[i] in (12, 24, 36, 48, 60):
+                if fn.x[i] in (36, 60, 96, 115):
                     yv.append(fn(fn.x)[i])
                     # st.metric('X:' + str(fn.x[i]), fn(fn.x)[i])
-            plt.step(fn.x[12:61], fn(fn.x)[12:61], where="post")
+            plt.step(fn.x[0:120], fn(fn.x)[0:120], where="post")
         y_df = pd.DataFrame(yv).T
-        y_df.columns = ['12months', '24months', '36months', '48months', '60months']
+        y_df.columns = ['36months', '60months', '96months', '115months']
         st.table(y_df)
+        plt.xlim(0,120)
         plt.ylabel("Survival probability")
         plt.xlabel("Time in months")
         plt.title('Survival Probability')

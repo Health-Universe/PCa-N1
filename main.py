@@ -1,11 +1,8 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder
-from sksurv.ensemble import RandomSurvivalForest
-from sksurv.ensemble import GradientBoostingSurvivalAnalysis
 import matplotlib.pyplot as plt
+import joblib
 
 st.set_page_config(page_title='ML', layout='centered')
 
@@ -68,51 +65,8 @@ if radio == 'No':
 else:
     radio = [0, 1]
 
-clinical_data = pd.read_csv('seer_prostate_data_N3.0.csv')
-clinical_data = clinical_data.drop(['Unnamed: 0'], axis=1)
-survival_time = clinical_data['Time']
-survival_status = clinical_data['Event']
-merge_df = clinical_data.drop(['Time', 'Event'], axis=1)
-
-survival_target = pd.concat([survival_time, survival_status], axis=1)
-survival_target['Event'] = survival_target['Event'].map({'Alive': False, 'Dead': True})
-
-x_train_n, x_test_n, y_train, y_test = train_test_split(merge_df, survival_target, test_size=0.3, random_state=123)
-
-def onehot(_x_train_n):
-    data_cata_train = _x_train_n.iloc[:, 0:7]
-    data_int_train = _x_train_n.iloc[:, 7:]
-    encoder = OneHotEncoder()
-    x_train_cata = encoder.fit_transform(data_cata_train).toarray()
-    x_train_cata = pd.DataFrame(x_train_cata)
-    x_train_cata.columns = encoder.get_feature_names_out()
-    data_int_train = data_int_train.astype('float')
-    data_int_train = data_int_train.reset_index(drop=True)
-    _x_train = pd.concat([x_train_cata, data_int_train], axis=1)
-    return _x_train
-
-x_train = onehot(x_train_n)
-new_y_train = [(y_train['Event'].iloc[i], y_train['Time'].iloc[i]) for i in range(y_train.shape[0])]
-new_y_train = np.array(new_y_train, dtype=[('status', 'bool'), ('time', '<f8')])
-
-RSFsurvival = RandomSurvivalForest(n_estimators=95,
-                                   max_depth=5,
-                                   min_samples_leaf=3,
-                                   min_samples_split=15,
-                                   n_jobs=8,
-                                   random_state=0)
-RSFsurvival.fit(x_train, new_y_train)
-
-GDBT = GradientBoostingSurvivalAnalysis(learning_rate=0.4,
-                                        n_estimators=50,
-                                        min_samples_leaf=6,
-                                        min_samples_split=2,
-                                        max_depth=3,
-                                        subsample=1,
-                                        dropout_rate=0,
-                                        random_state=0)
-GDBT.fit(x_train, new_y_train)
-
+RSFsurvival = joblib.load('RSFsurvival.pkl')
+GDBT = joblib.load('GDBT.pkl')
 model = st.selectbox('Model Select', ['Gradient Boosting Survival Analysis', 'Random Survival Forest'])
 query = st.button('Predict')
 if query:

@@ -65,8 +65,8 @@ if radio == 'No':
 else:
     radio = [0, 1]
 
-RSFsurvival = joblib.load('D:/Python/前列腺癌/03-Code/RSFsurvival.pkl')
-GDBT = joblib.load('D:/Python/前列腺癌/03-Code/GDBT.pkl')
+RSFsurvival = joblib.load('RSFsurvival.pkl')
+GDBT = joblib.load('GDBT.pkl')
 model = st.selectbox('Model Select', ['Gradient Boosting Survival Analysis', 'Random Survival Forest'])
 query = st.button('Predict')
 if query:

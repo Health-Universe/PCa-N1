@@ -80,6 +80,8 @@ if query:
     x_psa_df = pd.DataFrame([psa],columns=['PSA'])
     x_test = pd.concat([x_df, x_psa_df], axis=1)
     fig = plt.figure()
+    prob = RSF.predict(x_test)
+    st.subheader('RSF  score: '+ str(round(prob[0],2)))
     st.subheader('Survival probability between 12 and 60 months:')
     surv = RSF.predict_survival_function(x_test, return_array=True)
     yv = []

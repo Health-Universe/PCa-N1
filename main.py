@@ -65,7 +65,7 @@ if radio == 'No':
 else:
     radio = [0, 1]
 
-RSF = joblib.load('RSF11.27.pkl')
+RSF = joblib.load('RSF.pkl')
 query = st.button('Predict')
 if query:
     age.extend(race)

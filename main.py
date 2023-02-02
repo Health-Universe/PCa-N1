@@ -8,7 +8,7 @@ st.set_page_config(page_title='ML', layout='centered')
 
 st.title('Machine Learning Prognostic Model for the Overall Survival of Prostate Cancer Patients with Lymph Node-positive ')
 st.sidebar.subheader('Variable Select')
-age = st.sidebar.selectbox('Age', ['≤60', '61-69', '≥70'])
+age = st.sidebar.selectbox('Age', ['≤60', '61-69', '≥70'],index=2)
 if age == '61-69':
     age = [1, 0, 0]
 elif age == '≤60':
@@ -27,7 +27,7 @@ if marital == 'Married':
     marital = [1, 0]
 else:
     marital = [0, 1]
-clinical = st.sidebar.selectbox('Clinical T stage', ['T1-T3a', 'T3b', 'T4'])
+clinical = st.sidebar.selectbox('Clinical T stage', ['T1-T3a', 'T3b', 'T4'], index=1)
 if clinical == 'T1-T3a':
     clinical = [1, 0, 0]
 elif clinical == 'T3b':
@@ -35,7 +35,7 @@ elif clinical == 'T3b':
 else:
     clinical = [0, 0, 1]
 psa = st.sidebar.number_input('PSA level', min_value=0.1, max_value=98.0, step=0.1, value=20.0)
-gs = st.sidebar.selectbox('Gleason Score', ['≤7(3+4)', '7(4+3)', '8', '≥9'])
+gs = st.sidebar.selectbox('Gleason Score', ['≤7(3+4)', '7(4+3)', '8', '≥9'], index=3)
 if gs == '7(4+3)':
     gs = [1, 0, 0, 0]
 elif gs == '8':
@@ -58,13 +58,13 @@ if therapy == 'No':
     therapy = [1, 0]
 else:
     therapy = [0, 1]
-radio = st.sidebar.selectbox('Radiotherapy', ['Yes', 'No'])
+radio = st.sidebar.selectbox('Radiotherapy', ['Yes', 'No'], index=1)
 if radio == 'No':
     radio = [1, 0]
 else:
     radio = [0, 1]
 
-GBSA = joblib.load('GBSA12.18.pkl')
+GBSA = joblib.load('D:/Python/前列腺癌/03-Code/GBSA12.18.pkl')
 query = st.button('Predict')
 if query:
     age.extend(race)

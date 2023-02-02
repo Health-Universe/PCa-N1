@@ -34,7 +34,7 @@ elif clinical == 'T3b':
     clinical = [0, 1, 0]
 else:
     clinical = [0, 0, 1]
-psa = st.sidebar.number_input('PSA level', min_value=0.1, max_value=98.0, step=0.1)
+psa = st.sidebar.number_input('PSA level', min_value=0.1, max_value=98.0, step=0.1, value=20.0)
 gs = st.sidebar.selectbox('Gleason Score', ['≤7(3+4)', '7(4+3)', '8', '≥9'])
 if gs == '7(4+3)':
     gs = [1, 0, 0, 0]

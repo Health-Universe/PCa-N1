@@ -64,7 +64,7 @@ if radio == 'No':
 else:
     radio = [0, 1]
 
-GBSA = joblib.load('D:/Python/前列腺癌/03-Code/GBSA12.18.pkl')
+GBSA = joblib.load('GBSA12.18.pkl')
 query = st.button('Predict')
 if query:
     age.extend(race)

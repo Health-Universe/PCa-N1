@@ -6,7 +6,9 @@ import joblib
 #pengzihexjtu-pca-n1
 st.set_page_config(page_title='ML', layout='centered')
 
-st.title('Machine Learning Prognostic Model for the Overall Survival of Prostate Cancer Patients with Lymph Node-positive ')
+st.markdown('### Machine Learning Prognostic Model for the Overall Survival of Prostate Cancer Patients with Lymph Node-positive ')
+st.write('This app is designed to predict the overall survival of prostate cancer patients with lymph node-positive status. Healthcare professionals can input patient-specific variables such as age, race, marital status, clinical T stage, PSA level, Gleason score, number of positive lymph nodes, and treatment details. Upon submission, the app utilizes a pre-trained Gradient Boosting Survival Analysis (GBSA) model to calculate and display survival probabilities and a survival probability curve, aiding in personalized patient care and informed decision-making.')
+
 st.sidebar.subheader('Variable Select')
 age = st.sidebar.selectbox('Age', ['≤60', '61-69', '≥70'],index=2)
 if age == '61-69':

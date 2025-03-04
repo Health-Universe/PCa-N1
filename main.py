@@ -144,8 +144,7 @@ if query:
 # Sidebar UI
 st.sidebar.markdown("""
 <h2 style='color: black; margin-bottom: 0; font-size: 1em;'>Overview</h2>
-<a href="https://www.nature.com/articles/s41598-023-45804-x" target="_blank";"><strong>Paper</strong></a>   |
-<a href="https://github.com/pengzihexjtu/PCa-N1" target="_blank";"><strong>Website</strong></a>  
+<a href="https://www.nature.com/articles/s41598-023-45804-x" target="_blank";"><strong>Paper</strong></a> 
 <p>   </p>
 <p>This app is designed to predict the overall survival of prostate cancer patients with lymph node-positive status. Healthcare professionals can input patient-specific variables such as age, race, marital status, clinical T stage, PSA level, Gleason score, number of positive lymph nodes, and treatment details. Upon submission, the app utilizes a pre-trained Gradient Boosting Survival Analysis (GBSA) model to calculate and display survival probabilities and a survival probability curve, aiding in personalized patient care and informed decision-making.</p>
 """, unsafe_allow_html=True)
